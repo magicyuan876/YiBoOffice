@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yibo.office.mapper.FileInfoMapper">
+    
+    <resultMap type="com.yibo.office.domain.SysFileInfo" id="FileInfoResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="originalFilePath"    column="original_file_path"    />
+        <result property="fileMd5"    column="file_md5"    />
+        <result property="destFilePath"    column="dest_file_path"    />
+    </resultMap>
+
+    <sql id="selectFileInfoVo">
+        select id, file_name, original_file_path, file_md5, dest_file_path from sys_file_info
+    </sql>
+
+    <select id="selectFileInfoList" parameterType="com.yibo.office.domain.SysFileInfo" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>  
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+            <if test="originalFilePath != null  and originalFilePath != ''"> and original_file_path = #{originalFilePath}</if>
+            <if test="fileMd5 != null  and fileMd5 != ''"> and file_md5 = #{fileMd5}</if>
+            <if test="destFilePath != null  and destFilePath != ''"> and dest_file_path = #{destFilePath}</if>
+        </where>
+    </select>
+    
+    <select id="selectFileInfoById" parameterType="Integer" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFileInfo" parameterType="com.yibo.office.domain.SysFileInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_file_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">file_name,</if>
+            <if test="originalFilePath != null">original_file_path,</if>
+            <if test="fileMd5 != null">file_md5,</if>
+            <if test="destFilePath != null">dest_file_path,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">#{fileName},</if>
+            <if test="originalFilePath != null">#{originalFilePath},</if>
+            <if test="fileMd5 != null">#{fileMd5},</if>
+            <if test="destFilePath != null">#{destFilePath},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileInfo" parameterType="com.yibo.office.domain.SysFileInfo">
+        update sys_file_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="originalFilePath != null">original_file_path = #{originalFilePath},</if>
+            <if test="fileMd5 != null">file_md5 = #{fileMd5},</if>
+            <if test="destFilePath != null">dest_file_path = #{destFilePath},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFileInfoById" parameterType="Integer">
+        delete from sys_file_info where id = #{id}
+    </delete>
+
+    <delete id="deleteFileInfoByIds" parameterType="String">
+        delete from sys_file_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
