@@ -10,6 +10,9 @@
 
 ```部署环境: 建议windows服务器```
 
+### 转换接口 ###
+ - http://localhost/api/fileServer/convertByUrl?url=http://xxx.xlsx
+
 ## 开发指南 ##
 
 下一步计划
