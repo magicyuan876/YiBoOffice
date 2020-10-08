@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import com.yibo.common.constant.Constants;
 import com.yibo.common.utils.http.HttpUtils;
-import com.yibo.framework.config.RuoYiConfig;
+import com.yibo.framework.config.YiBoConfig;
 
 /**
  * 获取地址类
@@ -30,7 +30,7 @@ public class AddressUtils
         {
             return "内网IP";
         }
-        if (RuoYiConfig.isAddressEnabled())
+        if (YiBoConfig.isAddressEnabled())
         {
             try
             {

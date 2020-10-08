@@ -8,11 +8,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * 
  * @author yibo
  */
-public class RuoYiServletInitializer extends SpringBootServletInitializer
+public class YiBoServletInitializer extends SpringBootServletInitializer
 {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application)
     {
-        return application.sources(RuoYiApplication.class);
+        return application.sources(YiBoApplication.class);
     }
 }

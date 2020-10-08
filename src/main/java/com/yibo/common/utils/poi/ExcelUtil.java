@@ -50,7 +50,7 @@ import com.yibo.framework.aspectj.lang.annotation.Excel;
 import com.yibo.framework.aspectj.lang.annotation.Excel.ColumnType;
 import com.yibo.framework.aspectj.lang.annotation.Excel.Type;
 import com.yibo.framework.aspectj.lang.annotation.Excels;
-import com.yibo.framework.config.RuoYiConfig;
+import com.yibo.framework.config.YiBoConfig;
 import com.yibo.framework.web.domain.AjaxResult;
 import com.yibo.project.system.dict.utils.DictUtils;
 
@@ -815,7 +815,7 @@ public class ExcelUtil<T>
      */
     public String getAbsoluteFile(String filename)
     {
-        String downloadPath = RuoYiConfig.getDownloadPath() + filename;
+        String downloadPath = YiBoConfig.getDownloadPath() + filename;
         File desc = new File(downloadPath);
         if (!desc.getParentFile().exists())
         {

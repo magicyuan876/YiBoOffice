@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.yibo.common.utils.CookieUtils;
 import com.yibo.common.utils.ServletUtils;
 import com.yibo.common.utils.StringUtils;
-import com.yibo.framework.config.RuoYiConfig;
+import com.yibo.framework.config.YiBoConfig;
 import com.yibo.framework.web.controller.BaseController;
 import com.yibo.project.system.config.service.IConfigService;
 import com.yibo.project.system.menu.domain.Menu;
@@ -33,7 +33,7 @@ public class IndexController extends BaseController
     private IConfigService configService;
 
     @Autowired
-    private RuoYiConfig ruoYiConfig;
+    private YiBoConfig YiBoConfig;
 
     // 系统首页
     @GetMapping("/index")
@@ -48,8 +48,8 @@ public class IndexController extends BaseController
         mmap.put("sideTheme", configService.selectConfigByKey("sys.index.sideTheme"));
         mmap.put("skinName", configService.selectConfigByKey("sys.index.skinName"));
         mmap.put("ignoreFooter", configService.selectConfigByKey("sys.index.ignoreFooter"));
-        mmap.put("copyrightYear", ruoYiConfig.getCopyrightYear());
-        mmap.put("demoEnabled", ruoYiConfig.isDemoEnabled());
+        mmap.put("copyrightYear", YiBoConfig.getCopyrightYear());
+        mmap.put("demoEnabled", YiBoConfig.isDemoEnabled());
 
         // 菜单导航显示风格
         String menuStyle = configService.selectConfigByKey("sys.index.menuStyle");
@@ -88,7 +88,7 @@ public class IndexController extends BaseController
     @GetMapping("/system/main")
     public String main(ModelMap mmap)
     {
-        mmap.put("version", ruoYiConfig.getVersion());
+        mmap.put("version", YiBoConfig.getVersion());
         return "main";
     }
 }

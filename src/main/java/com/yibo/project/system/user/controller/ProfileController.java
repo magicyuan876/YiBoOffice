@@ -15,7 +15,7 @@ import com.yibo.common.utils.StringUtils;
 import com.yibo.common.utils.file.FileUploadUtils;
 import com.yibo.framework.aspectj.lang.annotation.Log;
 import com.yibo.framework.aspectj.lang.enums.BusinessType;
-import com.yibo.framework.config.RuoYiConfig;
+import com.yibo.framework.config.YiBoConfig;
 import com.yibo.framework.shiro.service.PasswordService;
 import com.yibo.framework.web.controller.BaseController;
 import com.yibo.framework.web.domain.AjaxResult;
@@ -153,7 +153,7 @@ public class ProfileController extends BaseController
         {
             if (!file.isEmpty())
             {
-                String avatar = FileUploadUtils.upload(RuoYiConfig.getAvatarPath(), file);
+                String avatar = FileUploadUtils.upload(YiBoConfig.getAvatarPath(), file);
                 currentUser.setAvatar(avatar);
                 if (userService.updateUserInfo(currentUser) > 0)
                 {

@@ -11,7 +11,7 @@ import com.yibo.common.exception.file.InvalidExtensionException;
 import com.yibo.common.utils.DateUtils;
 import com.yibo.common.utils.StringUtils;
 import com.yibo.common.utils.uuid.IdUtils;
-import com.yibo.framework.config.RuoYiConfig;
+import com.yibo.framework.config.YiBoConfig;
 
 /**
  * 文件上传工具类
@@ -33,7 +33,7 @@ public class FileUploadUtils
     /**
      * 默认上传的地址
      */
-    private static String defaultBaseDir = RuoYiConfig.getProfile();
+    private static String defaultBaseDir = YiBoConfig.getProfile();
 
     public static void setDefaultBaseDir(String defaultBaseDir)
     {
@@ -143,7 +143,7 @@ public class FileUploadUtils
 
     private static final String getPathFileName(String uploadDir, String fileName) throws IOException
     {
-        int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
+        int dirLastIndex = YiBoConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
         String pathFileName = Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName;
         return pathFileName;
