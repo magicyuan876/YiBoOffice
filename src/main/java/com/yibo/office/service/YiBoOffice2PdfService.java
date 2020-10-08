@@ -22,7 +22,7 @@ public class YiBoOffice2PdfService {
     private static final int ppSaveAsPDF = 32;
 
     public final static String WPS_WPS = "KWPS.Application";
-    public final static String WPS_ET  = "KET.Application";
+    public final static String WPS_ET = "KET.Application";
     public final static String WPS_DPS = "KWPP.Application";
 
     /**
