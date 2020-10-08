@@ -1,8 +1,12 @@
 package com.yibo.office.controller;
 
+import com.yibo.common.utils.DateUtils;
+import com.yibo.common.utils.SnowflakeIdWorkerService;
+import com.yibo.common.utils.file.FileUploadUtils;
 import com.yibo.office.service.YiBoOffice2PdfService;
 import kong.unirest.Unirest;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/fileServer")
@@ -24,14 +29,25 @@ public class FileInfoRestController {
     @Autowired
     private YiBoOffice2PdfService yiBoOffice2PdfService;
 
+    @Autowired
+    private SnowflakeIdWorkerService snowflakeIdWorkerService;
+
+    @RequestMapping("convertByUrl")
     public ResponseEntity<byte[]> convertOfficeByUrl(String url) throws IOException {
 
+        String fileType = StringUtils.substringAfterLast(url, ".");
+        File destDir = new File(FileUploadUtils.getDefaultBaseDir() + File.separator + DateUtils.parseDateToStr("yyyyMMdd", new Date()));
+        if (!destDir.exists()) {
+            FileUtils.forceMkdir(destDir);
+        }
+        String destFileName = snowflakeIdWorkerService.nextId() + "";
         File result = Unirest.get(url)
-                .asFile("/disk/location/file.zip")
+                .asFile(destDir.getAbsolutePath() + File.separator + destFileName + "." + fileType)
                 .getBody();
-        yiBoOffice2PdfService.office2pdf(result.getAbsolutePath(), result.getName());
+        String destFile = yiBoOffice2PdfService.office2pdf(result.getAbsolutePath(), destFileName);
 
-        String fileName = URLEncoder.encode(result.getName(), "utf-8");
+        File pdfFile = new File(destFile);
+        String fileName = URLEncoder.encode(pdfFile.getName(), "utf-8");
         HttpHeaders httpHeaders = new HttpHeaders();
         // 通知浏览器以下载文件方式打开
         ContentDisposition contentDisposition =
@@ -43,7 +59,7 @@ public class FileInfoRestController {
         //return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(new File(image.getLocation())),
         //        httpHeaders, HttpStatus.OK);
         // 使用spring自带的工具类也可以 FileCopyUtils
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(result),
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(pdfFile),
                 httpHeaders, HttpStatus.OK);
 
 

@@ -4,10 +4,14 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+import com.yibo.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 @Service
@@ -15,7 +19,8 @@ import java.util.Date;
 public class YiBoOffice2PdfService {
 
     private String office_path = "D:/officeconvert/officefile/";
-    private String pdf_path = "D://";
+    @Value("${yibo.pdfPath}")
+    private String pdfPath;
 
     private static final int wdFormatPDF = 17;
     private static final int xlTypePDF = 0;
@@ -31,17 +36,24 @@ public class YiBoOffice2PdfService {
      * @param inputFileName
      * @return
      */
-    public boolean office2pdf(String inputFileName, String destFileName) {
+    public String office2pdf(String inputFileName, String destFileName) {
         String officeUserPath = inputFileName;
         inputFileName = inputFileName.substring(0, inputFileName.lastIndexOf("."));
-        String pdfUserPath = String.format(pdf_path + "%s", destFileName + ".pdf");
+        File destDir = new File(pdfPath + DateUtils.parseDateToStr("yyyyMMdd", new Date()));
+        if (!destDir.exists()) {
+            try {
+                FileUtils.forceMkdir(destDir);
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        String pdfUserPath = String.format(destDir.getAbsolutePath() + File.separator + "%s", destFileName + ".pdf");
         int time = convert2PDF(officeUserPath, pdfUserPath);
-        boolean result = false;
         if (time == -4) {
 
             log.info("转化失败，未知错误...");
         } else if (time == -3) {
-            result = true;
             log.info("原文件就是PDF文件,无需转化...");
         } else if (time == -2) {
             log.info("转化失败，文件不存在...");
@@ -50,10 +62,9 @@ public class YiBoOffice2PdfService {
         } else if (time < -4) {
             log.info("转化失败，请重新尝试...");
         } else {
-            result = true;
             log.info("转化成功，用时：  " + time + "s...");
         }
-        return result;
+        return pdfUserPath;
     }
 
     /***

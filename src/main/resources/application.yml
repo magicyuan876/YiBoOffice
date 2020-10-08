@@ -10,6 +10,7 @@ yibo:
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/yibo/uploadPath，Linux配置 /home/yibo/uploadPath）
   profile: D:/yibo/uploadPath
+  pdfPath: D:/yibo/pdfPath/
   # 获取ip地址开关
   addressEnabled: false
 
